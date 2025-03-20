@@ -18,28 +18,27 @@ public class RegisterRequest {
     @Size(min = 6)
     private String password;
 
-
-    public @NotBlank @Email String getEmail() {
-        return email;
-    }
-
-    public void setEmail(@NotBlank @Email String email) {
-        this.email = email;
-    }
-
-    public @NotBlank @Size(min = 4, max = 20) String getUsername() {
+    public String getUsername() {
         return username;
     }
 
-    public @NotBlank @Size(min = 6) String getPassword() {
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public String getPassword() {
         return password;
     }
 
-    public void setPassword(@NotBlank @Size(min = 6) String password) {
+    public void setPassword(String password) {
         this.password = password;
-    }
-
-    public void setUsername(@NotBlank @Size(min = 4, max = 20) String username) {
-        this.username = username;
     }
 }

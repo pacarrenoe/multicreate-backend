@@ -2,12 +2,11 @@ package cl.multicreate.app.dto;
 
 public class AuthResponse {
 
-    private String status;
+    private String status;   // SUCCESS o FAIL
     private String message;
     private String token;
 
-    public AuthResponse() {
-    }
+    public AuthResponse() {}
 
     public AuthResponse(String status, String message, String token) {
         this.status = status;
@@ -31,4 +30,11 @@ public class AuthResponse {
         this.message = message;
     }
 
+    public String getToken() {
+        return token;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
+    }
 }

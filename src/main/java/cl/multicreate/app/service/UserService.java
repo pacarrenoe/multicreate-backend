@@ -1,11 +1,9 @@
 package cl.multicreate.app.service;
 
 import cl.multicreate.app.dto.AuthResponse;
-import cl.multicreate.app.dto.LoginRequest;
-import cl.multicreate.app.dto.RegisterRequest;
+import cl.multicreate.app.dto.CreateUserRequest;
 import cl.multicreate.app.entity.User;
 import cl.multicreate.app.repository.UserRepository;
-import cl.multicreate.app.security.JwtUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -13,7 +11,7 @@ import org.springframework.stereotype.Service;
 
 @Service
 @Transactional
-public class AuthService {
+public class UserService {
 
     @Autowired
     private UserRepository userRepository;
@@ -21,10 +19,7 @@ public class AuthService {
     @Autowired
     private PasswordEncoder passwordEncoder;
 
-    @Autowired
-    private JwtUtils jwtUtils;
-
-    public AuthResponse register(RegisterRequest request) {
+    public AuthResponse createUserWithRole(CreateUserRequest request) {
         if (userRepository.existsByUsername(request.getUsername())) {
             return new AuthResponse("ERROR", "El username ya está en uso", null);
         }
@@ -36,25 +31,20 @@ public class AuthService {
         user.setUsername(request.getUsername());
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setRole("ROLE_USER");
-        userRepository.save(user);
+        user.setRole(request.getRole());
 
-        return new AuthResponse("EXITO", "Usuario registrado correctamente", null);
+        userRepository.save(user);
+        return new AuthResponse("EXITO", "Usuario creado con rol: " + request.getRole(), null);
     }
 
-    public AuthResponse login(LoginRequest request) {
-        User user = userRepository
-                .findByUsernameOrEmail(request.getUsernameOrEmail(), request.getUsernameOrEmail())
-                .orElse(null);
-
+    public AuthResponse changeUserRole(Long userId, String newRole) {
+        User user = userRepository.findById(userId).orElse(null);
         if (user == null) {
-            return new AuthResponse("ERROR", "Usuario o email no encontrado", null);
-        }
-        if (!passwordEncoder.matches(request.getPassword(), user.getPassword())) {
-            return new AuthResponse("ERROR", "Contraseña incorrecta", null);
+            return new AuthResponse("ERROR", "Usuario no encontrado", null);
         }
 
-        String token = jwtUtils.generateToken(user.getUsername(), user.getRole());
-        return new AuthResponse("ERROR", "Login exitoso", token);
+        user.setRole(newRole);
+        userRepository.save(user);
+        return new AuthResponse("EXITO", "Rol actualizado a: " + newRole, null);
     }
 }

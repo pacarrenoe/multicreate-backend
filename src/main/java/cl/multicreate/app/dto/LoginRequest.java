@@ -12,19 +12,19 @@ public class LoginRequest {
     @Size(min = 6)
     private String password;
 
-    public @NotBlank @Size(min = 6) String getPassword() {
-        return password;
-    }
-
-    public void setPassword(@NotBlank @Size(min = 6) String password) {
-        this.password = password;
-    }
-
-    public @NotBlank String getUsernameOrEmail() {
+    public String getUsernameOrEmail() {
         return usernameOrEmail;
     }
 
-    public void setUsernameOrEmail(@NotBlank String usernameOrEmail) {
+    public void setUsernameOrEmail(String usernameOrEmail) {
         this.usernameOrEmail = usernameOrEmail;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }

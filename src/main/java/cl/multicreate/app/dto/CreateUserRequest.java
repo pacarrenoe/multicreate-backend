@@ -1,48 +1,25 @@
-package cl.multicreate.app.entity;
+package cl.multicreate.app.dto;
 
-import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
 
-@Entity
-@Table(name = "users")
-public class User {
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+public class CreateUserRequest {
 
     @NotBlank
-    @Column(nullable = false, unique = true)
     @Size(min = 4, max = 20)
     private String username;
 
     @NotBlank
     @Email
-    @Column(nullable = false, unique = true)
     private String email;
 
     @NotBlank
     @Size(min = 6)
-    @Column(nullable = false)
     private String password;
 
-    @Column(nullable = false)
-    private String role = "ROLE_USER";
-
-    public User() {}
-
-    public User(String username, String email, String password, String role) {
-        this.username = username;
-        this.email = email;
-        this.password = password;
-        this.role = role;
-    }
-
-    public Long getId() {
-        return id;
-    }
+    @NotBlank
+    private String role; // "ROLE_ADMIN", "ROLE_EJECUTIVO", etc.
 
     public String getUsername() {
         return username;
@@ -67,8 +44,6 @@ public class User {
     public void setPassword(String password) {
         this.password = password;
     }
-
-    public void setId(Long id) {this.id = id;}
 
     public String getRole() {
         return role;
